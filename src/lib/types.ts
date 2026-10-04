@@ -10,11 +10,23 @@ export interface RouteInfo {
   durationMin: number;
 }
 
-export interface AmbulanceType {
-  id: 'basic' | 'icu';
+export interface Ambulance {
+  id: string;
   name: string;
-  baseFare: number;
-  perKm: number;
+  type: 'basic' | 'icu';
+  image_url: string | null;
+  base_lat: number;
+  base_lon: number;
+  base_address: string;
+  base_fare: number;
+  per_km: number;
   description: string;
   features: string[];
+  phone: string;
+  is_available: boolean;
+  created_at: string;
+}
+
+export interface AmbulanceWithDistance extends Ambulance {
+  distanceToPickupKm: number;
 }

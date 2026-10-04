@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { MapPin, Navigation2, Phone, Loader2, AlertCircle, RefreshCw, Ambulance } from 'lucide-react';
-import type { Location, RouteInfo } from '@/lib/types';
+import type { Location, RouteInfo, Ambulance as AmbulanceType, AmbulanceWithDistance } from '@/lib/types';
 import { getRoute } from '@/lib/routing';
-import { AMBULANCES, AMBULANCE_PHONE } from '@/lib/ambulance';
+import { fetchAmbulances, sortAmbulancesByProximity } from '@/lib/ambulanceData';
 import LocationSearch from '@/components/LocationSearch';
 import RouteSummary from '@/components/RouteSummary';
 import AmbulanceCard from '@/components/AmbulanceCard';
@@ -14,6 +14,37 @@ export default function App() {
   const [routeLoading, setRouteLoading] = useState(false);
   const [routeError, setRouteError] = useState(false);
   const [selectedAmbulance, setSelectedAmbulance] = useState<string | null>(null);
+
+  const [ambulances, setAmbulances] = useState<AmbulanceType[]>([]);
+  const [ambulancesLoading, setAmbulancesLoading] = useState(true);
+  const [ambulancesError, setAmbulancesError] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setAmbulancesLoading(true);
+    setAmbulancesError(false);
+
+    fetchAmbulances()
+      .then((data) => {
+        if (cancelled) return;
+        setAmbulances(data);
+        setAmbulancesLoading(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setAmbulancesError(true);
+        setAmbulancesLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const sortedAmbulances: AmbulanceWithDistance[] = useMemo(() => {
+    if (!pickup || ambulances.length === 0) return [];
+    return sortAmbulancesByProximity(ambulances, pickup);
+  }, [ambulances, pickup]);
 
   const bothSelected = pickup && destination;
 
@@ -46,17 +77,18 @@ export default function App() {
     };
   }, [pickup, destination, bothSelected]);
 
-  const handleAmbulanceSelect = (id: string) => {
-    if (selectedAmbulance === id) {
-      window.location.href = `tel:${AMBULANCE_PHONE}`;
+  const handleAmbulanceSelect = (amb: AmbulanceWithDistance) => {
+    if (selectedAmbulance === amb.id) {
+      window.location.href = `tel:${amb.phone}`;
     } else {
-      setSelectedAmbulance(id);
+      setSelectedAmbulance(amb.id);
     }
   };
 
+  const selectedAmb = sortedAmbulances.find((a) => a.id === selectedAmbulance);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-gray-100">
-      {/* Header */}
       <header className="sticky top-0 z-20 border-b border-gray-200 bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-4 sm:px-6">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500 text-white shadow-md shadow-rose-200">
@@ -151,39 +183,75 @@ export default function App() {
           <section className="mt-5">
             <div className="mb-4 flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">3</span>
-              <h2 className="text-base font-bold text-gray-800">Choose Ambulance Type</h2>
+              <h2 className="text-base font-bold text-gray-800">Choose Ambulance</h2>
+              {sortedAmbulances.length > 0 && (
+                <span className="ml-auto text-xs font-medium text-gray-400">
+                  Sorted by nearest to pickup
+                </span>
+              )}
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {AMBULANCES.map((amb) => (
-                <AmbulanceCard
-                  key={amb.id}
-                  ambulance={amb}
-                  route={route}
-                  isSelected={selectedAmbulance === amb.id}
-                  onSelect={() => handleAmbulanceSelect(amb.id)}
-                />
-              ))}
-            </div>
-
-            {selectedAmbulance && (
-              <div className="mt-5 flex flex-col items-center gap-3 rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 p-5 text-center">
-                <p className="text-sm text-gray-600">
-                  Tap the selected ambulance again or the button below to call and confirm your booking.
-                </p>
-                <a
-                  href={`tel:${AMBULANCE_PHONE}`}
-                  className="flex items-center gap-2.5 rounded-xl bg-emerald-500 px-8 py-3.5 text-base font-bold text-white shadow-lg shadow-emerald-300/50 transition-all hover:bg-emerald-600 hover:shadow-xl active:scale-[0.98]"
-                >
-                  <Phone className="h-5 w-5" />
-                  Call Now: +91 98765 43210
-                </a>
+            {ambulancesLoading && (
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white py-10">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+                <p className="mt-3 text-sm text-gray-500">Loading available ambulances...</p>
               </div>
+            )}
+
+            {ambulancesError && !ambulancesLoading && (
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white py-8 text-center">
+                <AlertCircle className="h-8 w-8 text-rose-500" />
+                <p className="mt-3 text-sm text-gray-600">Could not load ambulance listings.</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="mt-4 flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  Try again
+                </button>
+              </div>
+            )}
+
+            {!ambulancesLoading && !ambulancesError && sortedAmbulances.length === 0 && (
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white py-8 text-center">
+                <AlertCircle className="h-8 w-8 text-gray-400" />
+                <p className="mt-3 text-sm text-gray-500">No ambulances are currently available.</p>
+              </div>
+            )}
+
+            {!ambulancesLoading && !ambulancesError && sortedAmbulances.length > 0 && (
+              <>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {sortedAmbulances.map((amb) => (
+                    <AmbulanceCard
+                      key={amb.id}
+                      ambulance={amb}
+                      route={route}
+                      isSelected={selectedAmbulance === amb.id}
+                      onSelect={() => handleAmbulanceSelect(amb)}
+                    />
+                  ))}
+                </div>
+
+                {selectedAmb && (
+                  <div className="mt-5 flex flex-col items-center gap-3 rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 p-5 text-center">
+                    <p className="text-sm text-gray-600">
+                      Tap the selected ambulance again or the button below to call and confirm your booking.
+                    </p>
+                    <a
+                      href={`tel:${selectedAmb.phone}`}
+                      className="flex items-center gap-2.5 rounded-xl bg-emerald-500 px-8 py-3.5 text-base font-bold text-white shadow-lg shadow-emerald-300/50 transition-all hover:bg-emerald-600 hover:shadow-xl active:scale-[0.98]"
+                    >
+                      <Phone className="h-5 w-5" />
+                      Call Now: {selectedAmb.phone}
+                    </a>
+                  </div>
+                )}
+              </>
             )}
           </section>
         )}
 
-        {/* Footer info */}
         <footer className="mt-8 text-center">
           <p className="text-xs text-gray-400">
             Fares are estimates based on road distance. Final fare may vary based on traffic and road conditions.
