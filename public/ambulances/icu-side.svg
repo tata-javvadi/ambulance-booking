@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="ICU ambulance side view">
+  <rect width="640" height="400" fill="#fff1f2"/>
+  <rect y="310" width="640" height="90" fill="#d1d5db"/>
+  <rect x="70" y="150" width="430" height="140" rx="16" fill="#fff" stroke="#e11d48" stroke-width="5"/>
+  <rect x="460" y="175" width="110" height="115" rx="12" fill="#fff" stroke="#e11d48" stroke-width="5"/>
+  <rect x="95" y="170" width="105" height="55" rx="6" fill="#fecdd3"/>
+  <rect x="220" y="170" width="105" height="55" rx="6" fill="#fecdd3"/>
+  <rect x="345" y="170" width="75" height="55" rx="6" fill="#fecdd3"/>
+  <rect x="480" y="195" width="70" height="48" rx="6" fill="#fda4af"/>
+  <rect x="70" y="240" width="500" height="26" fill="#e11d48"/>
+  <text x="230" y="258" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#fff">ICU SIDE VIEW</text>
+  <circle cx="175" cy="300" r="28" fill="#111827"/>
+  <circle cx="175" cy="300" r="12" fill="#9ca3af"/>
+  <circle cx="490" cy="300" r="28" fill="#111827"/>
+  <circle cx="490" cy="300" r="12" fill="#9ca3af"/>
+</svg>

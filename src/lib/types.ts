@@ -15,6 +15,8 @@ export interface Ambulance {
   name: string;
   type: 'basic' | 'icu';
   image_url: string | null;
+  /** Client-enriched gallery for horizontal swipe on mobile cards */
+  images: string[];
   base_lat: number;
   base_lon: number;
   base_address: string;

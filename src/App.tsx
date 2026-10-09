@@ -307,7 +307,7 @@ export default function App() {
 
             {!ambulancesLoading && !ambulancesError && sortedAmbulances.length > 0 && (
               <>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="mx-auto flex w-full max-w-md flex-col gap-4">
                   {sortedAmbulances.map((amb, idx) => (
                     <AmbulanceCard
                       key={amb.id}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="ICU ambulance interior">
+  <rect width="640" height="400" fill="#fff7ed"/>
+  <rect x="40" y="40" width="560" height="320" rx="20" fill="#fff" stroke="#e11d48" stroke-width="4"/>
+  <rect x="70" y="70" width="180" height="140" rx="12" fill="#ffe4e6"/>
+  <rect x="90" y="100" width="140" height="18" rx="4" fill="#e11d48" opacity=".3"/>
+  <rect x="90" y="135" width="100" height="18" rx="4" fill="#e11d48" opacity=".2"/>
+  <rect x="280" y="70" width="280" height="210" rx="12" fill="#fff1f2" stroke="#fb7185" stroke-width="2"/>
+  <rect x="310" y="100" width="90" height="70" rx="8" fill="#fecdd3"/>
+  <rect x="420" y="100" width="90" height="70" rx="8" fill="#fda4af"/>
+  <rect x="310" y="190" width="200" height="50" rx="8" fill="#e11d48" opacity=".2"/>
+  <circle cx="520" cy="300" r="34" fill="#fee2e2" stroke="#e11d48" stroke-width="4"/>
+  <rect x="506" y="294" width="28" height="12" fill="#e11d48"/>
+  <rect x="514" y="286" width="12" height="28" fill="#e11d48"/>
+  <text x="190" y="340" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#be123c">ICU CRITICAL CARE BAY</text>
+</svg>
