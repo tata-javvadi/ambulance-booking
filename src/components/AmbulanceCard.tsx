@@ -1,7 +1,10 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Phone, Check, MapPin, Ambulance as AmbulanceIcon, Zap, HeartPulse } from 'lucide-react';
 import type { AmbulanceWithDistance, RouteInfo } from '@/lib/types';
 import { calculateFare } from '@/lib/routing';
+
+const AUTO_SCROLL_MS = 1500;
+const RESUME_AFTER_INTERACTION_MS = 5000;
 
 interface AmbulanceCardProps {
   ambulance: AmbulanceWithDistance;
@@ -21,7 +24,10 @@ export default function AmbulanceCard({ ambulance, route, isSelected, onSelect, 
       : [];
   const [activeIndex, setActiveIndex] = useState(0);
   const [failedIndexes, setFailedIndexes] = useState<Set<number>>(new Set());
+  const [paused, setPaused] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const activeIndexRef = useRef(0);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const visibleCount = images.filter((_, i) => !failedIndexes.has(i)).length;
   const hasGallery = images.length > 0 && visibleCount > 0;
@@ -30,15 +36,45 @@ export default function AmbulanceCard({ ambulance, route, isSelected, onSelect, 
     const el = scrollerRef.current;
     if (!el || el.clientWidth === 0) return;
     const index = Math.round(el.scrollLeft / el.clientWidth);
-    setActiveIndex(Math.min(Math.max(index, 0), images.length - 1));
+    const next = Math.min(Math.max(index, 0), images.length - 1);
+    activeIndexRef.current = next;
+    setActiveIndex(next);
   };
 
   const goToSlide = (index: number) => {
     const el = scrollerRef.current;
     if (!el) return;
-    el.scrollTo({ left: index * el.clientWidth, behavior: 'smooth' });
-    setActiveIndex(index);
+    const next = ((index % images.length) + images.length) % images.length;
+    el.scrollTo({ left: next * el.clientWidth, behavior: 'smooth' });
+    activeIndexRef.current = next;
+    setActiveIndex(next);
   };
+
+  const pauseAutoScroll = () => {
+    setPaused(true);
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => setPaused(false), RESUME_AFTER_INTERACTION_MS);
+  };
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
+  useEffect(() => {
+    if (images.length <= 1 || paused) return;
+
+    const timer = setInterval(() => {
+      goToSlide(activeIndexRef.current + 1);
+    }, AUTO_SCROLL_MS);
+
+    return () => clearInterval(timer);
+  }, [images.length, paused]);
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    };
+  }, []);
 
   return (
     <article
@@ -72,6 +108,8 @@ export default function AmbulanceCard({ ambulance, route, isSelected, onSelect, 
             <div
               ref={scrollerRef}
               onScroll={handleScroll}
+              onPointerDown={pauseAutoScroll}
+              onTouchStart={pauseAutoScroll}
               className="flex h-48 snap-x snap-mandatory overflow-x-auto overscroll-x-contain scrollbar-none"
               style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               aria-label={`${ambulance.name} photos`}
@@ -115,6 +153,7 @@ export default function AmbulanceCard({ ambulance, route, isSelected, onSelect, 
                     aria-label={`Show photo ${index + 1}`}
                     onClick={(e) => {
                       e.stopPropagation();
+                      pauseAutoScroll();
                       goToSlide(index);
                     }}
                     className={`pointer-events-auto h-1.5 rounded-full transition-all ${
