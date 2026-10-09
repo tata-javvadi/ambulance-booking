@@ -1,5 +1,6 @@
 import type { Location, Ambulance, AmbulanceWithDistance } from './types';
 import { supabase } from './supabase';
+import { withAmbulanceImage } from './ambulanceImages';
 
 export async function fetchAmbulances(): Promise<Ambulance[]> {
   const { data, error } = await supabase
@@ -16,7 +17,7 @@ export async function fetchAmbulances(): Promise<Ambulance[]> {
     return [];
   }
 
-  return data as Ambulance[];
+  return (data as Ambulance[]).map(withAmbulanceImage);
 }
 
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {

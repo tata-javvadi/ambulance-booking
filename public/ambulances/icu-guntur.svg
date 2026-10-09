@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="ICU ambulance Guntur">
+  <defs>
+    <linearGradient id="sky4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff1f2"/>
+      <stop offset="100%" stop-color="#ffedd5"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="400" fill="url(#sky4)"/>
+  <rect y="305" width="640" height="95" fill="#cbd5e1"/>
+  <rect x="115" y="145" width="350" height="145" rx="16" fill="#fff" stroke="#be123c" stroke-width="6"/>
+  <rect x="425" y="170" width="115" height="120" rx="12" fill="#fff" stroke="#be123c" stroke-width="6"/>
+  <rect x="445" y="185" width="72" height="50" rx="8" fill="#fda4af"/>
+  <rect x="145" y="165" width="90" height="55" rx="8" fill="#fecdd3"/>
+  <rect x="255" y="165" width="90" height="55" rx="8" fill="#fecdd3"/>
+  <rect x="115" y="235" width="425" height="28" fill="#be123c"/>
+  <text x="235" y="254" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#fff">ICU / ALS UNIT</text>
+  <circle cx="370" cy="185" r="22" fill="#fff" stroke="#be123c" stroke-width="4"/>
+  <rect x="360" y="180" width="20" height="10" rx="2" fill="#be123c"/>
+  <rect x="365" y="175" width="10" height="20" rx="2" fill="#be123c"/>
+  <rect x="460" y="150" width="28" height="12" rx="3" fill="#ef4444"/>
+  <rect x="495" y="150" width="28" height="12" rx="3" fill="#2563eb"/>
+  <circle cx="205" cy="302" r="30" fill="#0f172a"/>
+  <circle cx="205" cy="302" r="12" fill="#94a3b8"/>
+  <circle cx="455" cy="302" r="30" fill="#0f172a"/>
+  <circle cx="455" cy="302" r="12" fill="#94a3b8"/>
+</svg>

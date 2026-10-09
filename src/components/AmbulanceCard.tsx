@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Phone, Check, MapPin, Ambulance as AmbulanceIcon, Zap, HeartPulse } from 'lucide-react';
 import type { AmbulanceWithDistance, RouteInfo } from '@/lib/types';
 import { calculateFare } from '@/lib/routing';
@@ -13,6 +14,8 @@ interface AmbulanceCardProps {
 export default function AmbulanceCard({ ambulance, route, isSelected, onSelect, rank }: AmbulanceCardProps) {
   const fare = calculateFare(ambulance.base_fare, ambulance.per_km, route.distanceKm);
   const isIcu = ambulance.type === 'icu';
+  const [imageFailed, setImageFailed] = useState(false);
+  const showImage = Boolean(ambulance.image_url) && !imageFailed;
 
   return (
     <button
@@ -35,53 +38,54 @@ export default function AmbulanceCard({ ambulance, route, isSelected, onSelect, 
 
       {/* Selection check */}
       {isSelected && (
-        <div className={`absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full shadow-lg ${
+        <div className={`absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full shadow-lg ${
           isIcu ? 'bg-flash-500 shadow-flash-300' : 'bg-emerald-500 shadow-emerald-300'
         }`}>
           <Check className="h-4 w-4 text-white" strokeWidth={3} />
         </div>
       )}
 
-      <div className="p-5 pt-7">
-        {/* Image / Icon */}
-        <div className="mb-4 flex items-start gap-4">
-          <div className="relative h-18 w-18 shrink-0 overflow-hidden rounded-2xl bg-ink-100" style={{ height: '4.5rem', width: '4.5rem' }}>
-            {ambulance.image_url ? (
-              <img
-                src={ambulance.image_url}
-                alt={ambulance.name}
-                className="h-full w-full object-cover"
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.display = 'none';
-                }}
-              />
-            ) : (
-              <div className={`flex h-full w-full items-center justify-center ${
-                isIcu ? 'bg-gradient-to-br from-flash-100 to-flash-200 text-flash-600' : 'bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-600'
-              }`}>
-                {isIcu ? <HeartPulse className="h-6 w-6" /> : <AmbulanceIcon className="h-6 w-6" />}
-              </div>
-            )}
+      {/* Ambulance image */}
+      <div className={`relative h-40 w-full overflow-hidden ${
+        isIcu ? 'bg-gradient-to-br from-flash-100 to-flash-50' : 'bg-gradient-to-br from-emerald-100 to-emerald-50'
+      }`}>
+        {showImage ? (
+          <img
+            src={ambulance.image_url!}
+            alt={ambulance.name}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          <div className={`flex h-full w-full flex-col items-center justify-center gap-2 ${
+            isIcu ? 'text-flash-600' : 'text-emerald-600'
+          }`}>
+            {isIcu ? <HeartPulse className="h-12 w-12" /> : <AmbulanceIcon className="h-12 w-12" />}
+            <span className="text-xs font-semibold uppercase tracking-wide opacity-70">
+              {isIcu ? 'ICU unit' : 'Basic unit'}
+            </span>
           </div>
+        )}
+      </div>
 
-          <div className="min-w-0 flex-1 pr-8">
-            <div className="flex items-center gap-2">
-              <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-                isIcu ? 'bg-flash-100 text-flash-700' : 'bg-emerald-100 text-emerald-700'
-              }`}>
-                {isIcu ? 'ICU' : 'Basic'}
-              </span>
-            </div>
-            <h3 className="mt-1.5 text-base font-bold leading-tight text-ink-800 font-display">{ambulance.name}</h3>
-            <div className="mt-1 flex items-center gap-1 text-xs text-ink-400">
-              <MapPin className="h-3.5 w-3.5 shrink-0" />
-              <span className="truncate">{ambulance.base_address}</span>
-            </div>
+      <div className="p-5">
+        <div className="pr-2">
+          <div className="flex items-center gap-2">
+            <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+              isIcu ? 'bg-flash-100 text-flash-700' : 'bg-emerald-100 text-emerald-700'
+            }`}>
+              {isIcu ? 'ICU' : 'Basic'}
+            </span>
+          </div>
+          <h3 className="mt-1.5 text-base font-bold leading-tight text-ink-800 font-display">{ambulance.name}</h3>
+          <div className="mt-1 flex items-center gap-1 text-xs text-ink-400">
+            <MapPin className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">{ambulance.base_address}</span>
           </div>
         </div>
 
         {/* Distance badge */}
-        <div className="mb-3 flex items-center gap-2">
+        <div className="mb-3 mt-3 flex items-center gap-2">
           <div className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold ${
             rank === 0 ? 'bg-amber-50 text-amber-700' : 'bg-ink-50 text-ink-600'
           }`}>

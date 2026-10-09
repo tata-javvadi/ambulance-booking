@@ -85,12 +85,12 @@ CREATE POLICY "anon_delete_ambulances"
 ON ambulances FOR DELETE
 TO anon, authenticated USING (true);
 
--- Seed data: 4 ambulances across Andhra Pradesh cities
+-- Seed data: 4 ambulances across Andhra Pradesh cities (local test images in /public/ambulances)
 INSERT INTO ambulances (name, type, image_url, base_lat, base_lon, base_address, base_fare, per_km, description, features, phone, is_available) VALUES
 (
   'Basic Ambulance - Vijayawada',
   'basic',
-  NULL,
+  '/ambulances/basic-vijayawada.svg',
   16.5062,
   80.6480,
   'Vijayawada, Andhra Pradesh',
@@ -104,7 +104,7 @@ INSERT INTO ambulances (name, type, image_url, base_lat, base_lon, base_address,
 (
   'ICU Ambulance - Vijayawada',
   'icu',
-  NULL,
+  '/ambulances/icu-vijayawada.svg',
   16.5062,
   80.6480,
   'Vijayawada, Andhra Pradesh',
@@ -118,7 +118,7 @@ INSERT INTO ambulances (name, type, image_url, base_lat, base_lon, base_address,
 (
   'Basic Ambulance - Visakhapatnam',
   'basic',
-  NULL,
+  '/ambulances/basic-vizag.svg',
   17.6868,
   83.2185,
   'Visakhapatnam, Andhra Pradesh',
@@ -132,7 +132,7 @@ INSERT INTO ambulances (name, type, image_url, base_lat, base_lon, base_address,
 (
   'ICU Ambulance - Guntur',
   'icu',
-  NULL,
+  '/ambulances/icu-guntur.svg',
   16.3067,
   80.4365,
   'Guntur, Andhra Pradesh',

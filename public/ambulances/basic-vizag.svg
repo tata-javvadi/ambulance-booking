@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Basic ambulance Visakhapatnam">
+  <defs>
+    <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ecfdf5"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="400" fill="url(#sky3)"/>
+  <rect y="305" width="640" height="95" fill="#cbd5e1"/>
+  <rect x="130" y="155" width="330" height="135" rx="16" fill="#f8fafc" stroke="#0d9488" stroke-width="6"/>
+  <rect x="420" y="178" width="105" height="112" rx="12" fill="#f8fafc" stroke="#0d9488" stroke-width="6"/>
+  <rect x="438" y="192" width="68" height="48" rx="8" fill="#a5f3fc"/>
+  <rect x="155" y="175" width="85" height="50" rx="8" fill="#99f6e4"/>
+  <rect x="260" y="175" width="85" height="50" rx="8" fill="#99f6e4"/>
+  <rect x="130" y="240" width="395" height="26" fill="#0d9488"/>
+  <text x="255" y="258" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#fff">AMBULANCE</text>
+  <rect x="355" y="180" width="34" height="11" rx="2" fill="#dc2626"/>
+  <rect x="366" y="169" width="11" height="34" rx="2" fill="#dc2626"/>
+  <rect x="448" y="158" width="26" height="12" rx="3" fill="#f97316"/>
+  <rect x="480" y="158" width="26" height="12" rx="3" fill="#2563eb"/>
+  <circle cx="210" cy="302" r="30" fill="#0f172a"/>
+  <circle cx="210" cy="302" r="12" fill="#94a3b8"/>
+  <circle cx="445" cy="302" r="30" fill="#0f172a"/>
+  <circle cx="445" cy="302" r="12" fill="#94a3b8"/>
+</svg>
