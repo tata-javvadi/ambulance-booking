@@ -18,16 +18,17 @@ import AmbulanceCard from '@/components/AmbulanceCard';
 
 export default function App() {
   const [pickup, setPickup] = useState<Location | null>({
-    shortName: 'Visakhapatnam (KGH)',
-    displayName: 'King George Hospital, Maharanipeta, Visakhapatnam, Andhra Pradesh',
-    lat: 17.6868,
-    lon: 83.2185,
+    shortName: 'Bhimavaram',
+    displayName: 'Bhimavaram, West Godavari, Andhra Pradesh',
+    lat: 16.5408,
+    lon: 81.5232,
   });
+
   const [destination, setDestination] = useState<Location | null>({
-    shortName: 'Kakinada (GGH)',
-    displayName: 'Government General Hospital, Main Road, Kakinada, Andhra Pradesh',
-    lat: 16.9891,
-    lon: 82.2475,
+    shortName: 'Vijayawada',
+    displayName: 'Vijayawada, Andhra Pradesh',
+    lat: 16.5193,
+    lon: 80.6305,
   });
 
   const [route, setRoute] = useState<RouteInfo | null>(null);
