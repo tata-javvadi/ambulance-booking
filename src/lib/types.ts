@@ -13,7 +13,7 @@ export interface RouteInfo {
 export interface Ambulance {
   id: string;
   name: string;
-  type: 'basic' | 'icu';
+  type?: string;
   image_url: string | null;
   /** Client-enriched gallery for horizontal swipe on mobile cards */
   images: string[];

@@ -5,10 +5,10 @@ import {
   MapPin,
   Ambulance as AmbulanceIcon,
   Zap,
-  HeartPulse,
   ShieldCheck,
-  Activity,
   ChevronRight,
+  Clock,
+  Sparkles,
 } from 'lucide-react';
 import type { AmbulanceWithDistance, RouteInfo } from '@/lib/types';
 import { calculateFare } from '@/lib/routing';
@@ -32,7 +32,6 @@ export default function AmbulanceCard({
   rank,
 }: AmbulanceCardProps) {
   const fare = calculateFare(ambulance.base_fare, ambulance.per_km, route.distanceKm);
-  const isIcu = ambulance.type === 'icu';
   const images = ambulance.images?.length
     ? ambulance.images
     : ambulance.image_url
@@ -98,9 +97,7 @@ export default function AmbulanceCard({
       onClick={onSelect}
       className={`group relative w-full cursor-pointer overflow-hidden rounded-3xl border-2 text-left transition-all duration-300 active:scale-[0.99] ${
         isSelected
-          ? isIcu
-            ? 'border-flash-500 bg-white shadow-xl shadow-flash-500/10 ring-4 ring-flash-500/10'
-            : 'border-emerald-500 bg-white shadow-xl shadow-emerald-500/10 ring-4 ring-emerald-500/10'
+          ? 'border-emerald-600 bg-white shadow-xl shadow-emerald-600/10 ring-4 ring-emerald-500/10'
           : 'border-ink-200/90 bg-white hover:border-ink-300 hover:shadow-md'
       }`}
     >
@@ -120,17 +117,13 @@ export default function AmbulanceCard({
               {images.map((src, index) => (
                 <div key={`${src}-${index}`} className="relative h-full w-full shrink-0 snap-center">
                   {failedIndexes.has(index) ? (
-                    <div
-                      className={`flex h-full w-full flex-col items-center justify-center gap-2 ${
-                        isIcu ? 'bg-flash-950/40 text-flash-400' : 'bg-emerald-950/40 text-emerald-400'
-                      }`}
-                    >
-                      {isIcu ? <HeartPulse className="h-10 w-10" /> : <AmbulanceIcon className="h-10 w-10" />}
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-ink-900 text-ink-300">
+                      <AmbulanceIcon className="h-10 w-10 text-emerald-400" />
                     </div>
                   ) : (
                     <img
                       src={src}
-                      alt={`${ambulance.name} real photo ${index + 1}`}
+                      alt={`${ambulance.name} photo ${index + 1}`}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       draggable={false}
                       onError={() =>
@@ -147,19 +140,14 @@ export default function AmbulanceCard({
             </div>
 
             {/* Gradient vignette on photo */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/40" />
 
             {/* Top Floating Badges over Photo */}
             <div className="absolute inset-x-3 top-3 flex items-center justify-between pointer-events-none">
-              {/* Type badge */}
               <div className="flex items-center gap-1.5">
-                <span
-                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold tracking-wide text-white backdrop-blur-md shadow-md ${
-                    isIcu ? 'bg-flash-600/90' : 'bg-emerald-600/90'
-                  }`}
-                >
-                  {isIcu ? <HeartPulse className="h-3 w-3" /> : <Activity className="h-3 w-3" />}
-                  {isIcu ? 'ICU LIFE SUPPORT' : 'BASIC LIFE SUPPORT'}
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600/95 px-2.5 py-1 text-[11px] font-bold tracking-wide text-white backdrop-blur-md shadow-md">
+                  <ShieldCheck className="h-3 w-3" />
+                  PRIVATE AMBULANCE
                 </span>
 
                 {rank === 0 && (
@@ -173,11 +161,7 @@ export default function AmbulanceCard({
               {/* Photo count / selected check */}
               <div className="flex items-center gap-1.5">
                 {isSelected ? (
-                  <span
-                    className={`flex h-7 w-7 items-center justify-center rounded-full text-white shadow-lg ${
-                      isIcu ? 'bg-flash-500' : 'bg-emerald-500'
-                    }`}
-                  >
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg">
                     <Check className="h-4 w-4" strokeWidth={3} />
                   </span>
                 ) : (
@@ -192,12 +176,12 @@ export default function AmbulanceCard({
 
             {/* Bottom floating distance info over photo */}
             <div className="absolute inset-x-3 bottom-3 flex items-end justify-between pointer-events-none">
-              <div className="flex items-center gap-1.5 rounded-xl bg-black/60 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-md">
+              <div className="flex items-center gap-1.5 rounded-xl bg-black/65 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-md">
                 <MapPin className="h-3.5 w-3.5 text-amber-400" />
                 <span>
                   {ambulance.distanceToPickupKm < 1
-                    ? `${Math.round(ambulance.distanceToPickupKm * 1000)} m to pickup`
-                    : `${ambulance.distanceToPickupKm.toFixed(1)} km to pickup`}
+                    ? `${Math.round(ambulance.distanceToPickupKm * 1000)} m away`
+                    : `${ambulance.distanceToPickupKm.toFixed(1)} km away`}
                 </span>
               </div>
 
@@ -224,14 +208,10 @@ export default function AmbulanceCard({
             </div>
           </>
         ) : (
-          <div
-            className={`flex h-full w-full flex-col items-center justify-center gap-2 ${
-              isIcu ? 'bg-flash-900 text-flash-300' : 'bg-emerald-900 text-emerald-300'
-            }`}
-          >
-            {isIcu ? <HeartPulse className="h-12 w-12" /> : <AmbulanceIcon className="h-12 w-12" />}
-            <span className="text-xs font-bold uppercase tracking-wider opacity-80">
-              {isIcu ? 'ICU Unit' : 'Basic Unit'}
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-ink-900 text-emerald-300">
+            <AmbulanceIcon className="h-12 w-12 text-emerald-400" />
+            <span className="text-xs font-bold uppercase tracking-wider opacity-90">
+              Private Ambulance Service
             </span>
           </div>
         )}
@@ -276,9 +256,7 @@ export default function AmbulanceCard({
             <span className="text-[10px] font-bold uppercase tracking-wider text-ink-400">
               ₹{ambulance.base_fare} base + ₹{ambulance.per_km}/km
             </span>
-            <p className={`font-display text-2xl font-black tracking-tight ${
-              isIcu ? 'text-flash-600' : 'text-emerald-600'
-            }`}>
+            <p className="font-display text-2xl font-black tracking-tight text-emerald-700">
               ₹{fare.toLocaleString('en-IN')}
               <span className="ml-1 text-[11px] font-bold text-ink-400">total est.</span>
             </p>
@@ -287,9 +265,7 @@ export default function AmbulanceCard({
           <div
             className={`flex items-center gap-1.5 rounded-2xl px-4 py-2.5 text-xs font-extrabold transition-all shadow-sm ${
               isSelected
-                ? isIcu
-                  ? 'bg-flash-600 text-white shadow-flash-500/25'
-                  : 'bg-emerald-600 text-white shadow-emerald-500/25'
+                ? 'bg-emerald-600 text-white shadow-emerald-500/25'
                 : 'bg-ink-100 text-ink-800 hover:bg-ink-200'
             }`}
           >

@@ -121,9 +121,9 @@ export default function ConnectedLocationSearch({
               <span className="absolute h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-100" />
             </span>
-            <div className="my-1 w-[2px] flex-1 bg-gradient-to-b from-emerald-400 via-ink-200 to-flash-400" />
+            <div className="my-1 w-[2px] flex-1 bg-gradient-to-b from-emerald-400 via-ink-200 to-emerald-500" />
             <span className="flex h-3.5 w-3.5 items-center justify-center">
-              <span className="h-2.5 w-2.5 rounded-full bg-flash-500 ring-2 ring-flash-100" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-600 ring-2 ring-emerald-100" />
             </span>
           </div>
 
@@ -166,10 +166,10 @@ export default function ConnectedLocationSearch({
             </div>
 
             {/* Destination row */}
-            <div className="relative flex items-center rounded-2xl bg-ink-50/80 px-3 py-2 transition-all focus-within:bg-white focus-within:ring-2 focus-within:ring-flash-500/30">
+            <div className="relative flex items-center rounded-2xl bg-ink-50/80 px-3 py-2 transition-all focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-500/30">
               <div className="min-w-0 flex-1">
-                <span className="block text-[10px] font-bold uppercase tracking-wider text-flash-600">
-                  Emergency Destination
+                <span className="block text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                  Destination / Drop Location
                 </span>
                 <input
                   type="text"
@@ -179,7 +179,7 @@ export default function ConnectedLocationSearch({
                     setActiveField('destination');
                     if (destQuery.length >= 3) performSearch(destQuery);
                   }}
-                  placeholder="Search hospital or drop location..."
+                  placeholder="Search hospital, clinic, or drop location..."
                   className="w-full bg-transparent text-sm font-semibold text-ink-900 placeholder:font-normal placeholder:text-ink-400 focus:outline-none"
                 />
               </div>

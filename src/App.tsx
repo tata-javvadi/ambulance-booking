@@ -7,14 +7,7 @@ import {
   RefreshCw,
   Zap,
   ShieldCheck,
-  HeartPulse,
-  Activity,
-  SlidersHorizontal,
-  ChevronRight,
-  Flame,
-  Clock,
-  Sparkles,
-  ExternalLink,
+  Headphones,
 } from 'lucide-react';
 import type { Location, RouteInfo, Ambulance as AmbulanceType, AmbulanceWithDistance } from '@/lib/types';
 import { getRoute, calculateFare } from '@/lib/routing';
@@ -22,8 +15,6 @@ import { fetchAmbulances, sortAmbulancesByProximity } from '@/lib/ambulanceData'
 import ConnectedLocationSearch from '@/components/ConnectedLocationSearch';
 import RouteSummary from '@/components/RouteSummary';
 import AmbulanceCard from '@/components/AmbulanceCard';
-
-type FilterType = 'all' | 'icu' | 'basic';
 
 export default function App() {
   const [pickup, setPickup] = useState<Location | null>({
@@ -43,7 +34,6 @@ export default function App() {
   const [routeLoading, setRouteLoading] = useState(false);
   const [routeError, setRouteError] = useState(false);
   const [selectedAmbulance, setSelectedAmbulance] = useState<string | null>(null);
-  const [typeFilter, setTypeFilter] = useState<FilterType>('all');
 
   const [ambulances, setAmbulances] = useState<AmbulanceType[]>([]);
   const [ambulancesLoading, setAmbulancesLoading] = useState(true);
@@ -80,12 +70,6 @@ export default function App() {
     if (!pickup || ambulances.length === 0) return [];
     return sortAmbulancesByProximity(ambulances, pickup);
   }, [ambulances, pickup]);
-
-  // Filter ambulances by type
-  const filteredAmbulances = useMemo(() => {
-    if (typeFilter === 'all') return sortedAmbulances;
-    return sortedAmbulances.filter((amb) => amb.type === typeFilter);
-  }, [sortedAmbulances, typeFilter]);
 
   const bothSelected = pickup && destination;
 
@@ -129,39 +113,40 @@ export default function App() {
   const selectedAmb = sortedAmbulances.find((a) => a.id === selectedAmbulance) || sortedAmbulances[0];
 
   return (
-    <div className="min-h-screen bg-ink-950 font-sans text-ink-900 antialiased selection:bg-flash-500 selection:text-white">
+    <div className="min-h-screen bg-ink-950 font-sans text-ink-900 antialiased selection:bg-emerald-500 selection:text-white">
       {/* Mobile-first central wrapper */}
       <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-ink-50 shadow-2xl pb-28">
         
-        {/* Top App Bar with SOS Hotline */}
-        <header className="sticky top-0 z-30 border-b border-ink-200/80 bg-white/90 backdrop-blur-xl">
+        {/* Top App Bar */}
+        <header className="sticky top-0 z-30 border-b border-ink-200/80 bg-white/95 backdrop-blur-xl">
           <div className="flex items-center justify-between px-4 py-3">
             <div className="flex items-center gap-2.5">
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-flash-500 to-flash-700 text-white shadow-md shadow-flash-500/25">
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white shadow-md shadow-emerald-600/25">
                 <Ambulance className="h-5 w-5" />
                 <span className="absolute -right-0.5 -top-0.5 flex h-3 w-3">
-                  <span className="absolute h-full w-full animate-pulse-ring rounded-full bg-amber-400" />
-                  <span className="relative h-3 w-3 rounded-full bg-amber-400 ring-2 ring-white" />
+                  <span className="absolute h-full w-full animate-pulse-ring rounded-full bg-emerald-400" />
+                  <span className="relative h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-white" />
                 </span>
               </div>
               <div>
                 <h1 className="font-display text-base font-black tracking-tight text-ink-900 leading-none">
-                  Flash<span className="text-flash-600">Ambulance</span>
+                  Private<span className="text-emerald-600">Ambulance</span>
                 </h1>
                 <p className="mt-0.5 text-[11px] font-semibold text-emerald-600 flex items-center gap-1">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  AP Emergency 24/7
+                  Private Patient Booking 24/7
                 </p>
               </div>
             </div>
 
-            {/* Direct National Emergency SOS 108 Button */}
+            {/* Quick 24/7 Booking Helpline */}
             <a
-              href="tel:108"
-              className="flex items-center gap-1.5 rounded-full bg-flash-50 border border-flash-200 px-3 py-1.5 text-xs font-black text-flash-600 shadow-sm transition-transform active:scale-95"
+              href="tel:+919876543210"
+              className="flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1.5 text-xs font-bold text-emerald-700 shadow-sm transition-transform active:scale-95 hover:bg-emerald-100"
+              title="Direct Private Ambulance Helpdesk"
             >
-              <Flame className="h-3.5 w-3.5 fill-flash-500 text-flash-500" />
-              <span>SOS 108</span>
+              <Headphones className="h-3.5 w-3.5 text-emerald-600" />
+              <span>Helpdesk</span>
             </a>
           </div>
         </header>
@@ -183,16 +168,16 @@ export default function App() {
           {/* Route Loading State */}
           {routeLoading && (
             <div className="flex items-center justify-center gap-2.5 rounded-3xl border border-ink-200 bg-white p-4 shadow-sm animate-pulse">
-              <Loader2 className="h-5 w-5 animate-spin text-flash-500" />
-              <span className="text-xs font-bold text-ink-600">Calculating real road route & live traffic...</span>
+              <Loader2 className="h-5 w-5 animate-spin text-emerald-600" />
+              <span className="text-xs font-bold text-ink-600">Calculating real road route & distance...</span>
             </div>
           )}
 
           {/* Route Error State */}
           {routeError && !routeLoading && (
-            <div className="rounded-3xl border border-flash-200 bg-flash-50 p-4 text-center">
-              <AlertCircle className="mx-auto h-6 w-6 text-flash-500" />
-              <p className="mt-1.5 text-xs font-bold text-flash-800">
+            <div className="rounded-3xl border border-amber-200 bg-amber-50 p-4 text-center">
+              <AlertCircle className="mx-auto h-6 w-6 text-amber-600" />
+              <p className="mt-1.5 text-xs font-bold text-amber-900">
                 Could not find road route between locations.
               </p>
               <button
@@ -201,7 +186,7 @@ export default function App() {
                   setPickup(null);
                   setDestination(null);
                 }}
-                className="mt-2.5 inline-flex items-center gap-1 rounded-xl bg-flash-600 px-3 py-1.5 text-xs font-bold text-white shadow-sm"
+                className="mt-2.5 inline-flex items-center gap-1 rounded-xl bg-ink-900 px-3 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-ink-800"
               >
                 <RefreshCw className="h-3 w-3" />
                 Reset Locations
@@ -216,50 +201,21 @@ export default function App() {
             </section>
           )}
 
-          {/* Step 3: Choose Ambulance Feed */}
+          {/* Step 3: Choose Private Ambulance Feed */}
           {bothSelected && route && (
             <section className="space-y-3 pt-1">
-              {/* Category Filter Pills */}
+              {/* Private Ambulance Header */}
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                  <button
-                    type="button"
-                    onClick={() => setTypeFilter('all')}
-                    className={`rounded-full px-3 py-1.5 text-xs font-extrabold transition-all active:scale-95 ${
-                      typeFilter === 'all'
-                        ? 'bg-ink-900 text-white shadow-md'
-                        : 'bg-white text-ink-600 border border-ink-200 hover:bg-ink-100'
-                    }`}
-                  >
-                    All Units ({sortedAmbulances.length})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTypeFilter('icu')}
-                    className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-extrabold transition-all active:scale-95 ${
-                      typeFilter === 'icu'
-                        ? 'bg-flash-600 text-white shadow-md shadow-flash-500/20'
-                        : 'bg-white text-flash-700 border border-flash-200 hover:bg-flash-50'
-                    }`}
-                  >
-                    <HeartPulse className="h-3.5 w-3.5" />
-                    ICU Units
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTypeFilter('basic')}
-                    className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-extrabold transition-all active:scale-95 ${
-                      typeFilter === 'basic'
-                        ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/20'
-                        : 'bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50'
-                    }`}
-                  >
-                    <Activity className="h-3.5 w-3.5" />
-                    Basic Units
-                  </button>
+                <div>
+                  <h2 className="font-display text-sm font-extrabold text-ink-900">
+                    Available Private Ambulances
+                  </h2>
+                  <p className="text-[11px] font-medium text-ink-500">
+                    {sortedAmbulances.length} verified private services near pickup
+                  </p>
                 </div>
 
-                <span className="flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-2 py-1 text-[10px] font-bold text-amber-700 shrink-0">
+                <span className="flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-2.5 py-1 text-[10px] font-bold text-amber-700 shrink-0">
                   <Zap className="h-3 w-3 fill-amber-500 text-amber-500" />
                   Nearest First
                 </span>
@@ -268,22 +224,22 @@ export default function App() {
               {/* Ambulances Feed */}
               {ambulancesLoading && (
                 <div className="flex flex-col items-center justify-center rounded-3xl border border-ink-200 bg-white py-12 shadow-sm">
-                  <Loader2 className="h-8 w-8 animate-spin text-flash-500" />
-                  <p className="mt-3 text-xs font-bold text-ink-500">Loading available emergency ambulances...</p>
+                  <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+                  <p className="mt-3 text-xs font-bold text-ink-500">Loading available private ambulances...</p>
                 </div>
               )}
 
-              {!ambulancesLoading && filteredAmbulances.length === 0 && (
+              {!ambulancesLoading && sortedAmbulances.length === 0 && (
                 <div className="rounded-3xl border border-ink-200 bg-white p-8 text-center shadow-sm">
                   <AlertCircle className="mx-auto h-8 w-8 text-ink-300" />
-                  <p className="mt-2 text-sm font-bold text-ink-700">No matching ambulances available right now.</p>
-                  <p className="mt-1 text-xs text-ink-400">Try switching your category filter above.</p>
+                  <p className="mt-2 text-sm font-bold text-ink-700">No private ambulances available right now.</p>
+                  <p className="mt-1 text-xs text-ink-400">Please check your pickup location or contact our helpdesk.</p>
                 </div>
               )}
 
-              {!ambulancesLoading && filteredAmbulances.length > 0 && (
+              {!ambulancesLoading && sortedAmbulances.length > 0 && (
                 <div className="space-y-3.5">
-                  {filteredAmbulances.map((amb, index) => (
+                  {sortedAmbulances.map((amb, index) => (
                     <AmbulanceCard
                       key={amb.id}
                       ambulance={amb}
@@ -298,14 +254,14 @@ export default function App() {
             </section>
           )}
 
-          {/* Quick Help & Trust Footer info */}
+          {/* Trust and Assurance Info */}
           <div className="rounded-3xl border border-ink-200/80 bg-white p-4 shadow-sm space-y-2">
             <div className="flex items-center gap-2 text-xs font-bold text-ink-800">
               <ShieldCheck className="h-4 w-4 text-emerald-600" />
-              <span>Verified Emergency Fleet</span>
+              <span>Verified Private Ambulance Network</span>
             </div>
             <p className="text-[11px] text-ink-500 leading-relaxed">
-              All ambulances are equipped with GPS tracking, oxygen support, verified drivers, and 24/7 direct doctor-assisted dispatch.
+              All private ambulances offer verified attendants, patient stretcher, clean medical interior, oxygen support, and direct transparent per-km billing.
             </p>
           </div>
         </main>
@@ -321,7 +277,7 @@ export default function App() {
                 <span className="block text-[11px] font-semibold text-emerald-600">
                   {selectedAmb.distanceToPickupKm < 1
                     ? `${Math.round(selectedAmb.distanceToPickupKm * 1000)} m away`
-                    : `${selectedAmb.distanceToPickupKm.toFixed(1)} km away • Ready`}
+                    : `${selectedAmb.distanceToPickupKm.toFixed(1)} km away • Ready to dispatch`}
                 </span>
               </div>
 
@@ -329,9 +285,7 @@ export default function App() {
                 <span className="block text-[10px] font-bold uppercase tracking-wider text-ink-400">
                   Est. Fare
                 </span>
-                <span className={`font-display text-lg font-black ${
-                  selectedAmb.type === 'icu' ? 'text-flash-600' : 'text-emerald-600'
-                }`}>
+                <span className="font-display text-lg font-black text-emerald-700">
                   ₹{calculateFare(selectedAmb.base_fare, selectedAmb.per_km, route.distanceKm).toLocaleString('en-IN')}
                 </span>
               </div>
@@ -339,14 +293,10 @@ export default function App() {
 
             <a
               href={`tel:${selectedAmb.phone}`}
-              className={`flex w-full items-center justify-center gap-2.5 rounded-2xl py-3.5 text-base font-black text-white shadow-xl transition-transform active:scale-98 ${
-                selectedAmb.type === 'icu'
-                  ? 'bg-gradient-to-r from-flash-600 to-flash-700 shadow-flash-600/30'
-                  : 'bg-gradient-to-r from-emerald-600 to-emerald-700 shadow-emerald-600/30'
-              }`}
+              className="flex w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 py-3.5 text-base font-black text-white shadow-xl shadow-emerald-600/25 transition-transform active:scale-98 hover:from-emerald-700 hover:to-emerald-800"
             >
-              <Phone className="h-5 w-5 animate-bounce" />
-              <span>CALL & DISPATCH ({selectedAmb.phone})</span>
+              <Phone className="h-5 w-5" />
+              <span>CALL & BOOK ({selectedAmb.phone})</span>
             </a>
           </div>
         )}

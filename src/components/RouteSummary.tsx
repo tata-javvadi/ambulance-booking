@@ -31,7 +31,7 @@ export default function RouteSummary({ route }: RouteSummaryProps) {
         {/* Distance Card */}
         <div className="rounded-2xl bg-white/5 p-3 backdrop-blur-sm">
           <div className="flex items-center gap-1.5 text-ink-400">
-            <Route className="h-3.5 w-3.5 text-flash-400" />
+            <Route className="h-3.5 w-3.5 text-emerald-400" />
             <span className="text-[10px] font-bold uppercase tracking-wider">Total Distance</span>
           </div>
           <p className="mt-1 font-display text-2xl font-black tracking-tight text-white sm:text-3xl">
@@ -41,8 +41,8 @@ export default function RouteSummary({ route }: RouteSummaryProps) {
         </div>
 
         {/* Estimated Duration Card */}
-        <div className="rounded-2xl bg-gradient-to-br from-flash-600/30 to-flash-700/20 border border-flash-500/20 p-3 backdrop-blur-sm">
-          <div className="flex items-center gap-1.5 text-flash-300">
+        <div className="rounded-2xl bg-gradient-to-br from-emerald-600/30 to-emerald-700/20 border border-emerald-500/20 p-3 backdrop-blur-sm">
+          <div className="flex items-center gap-1.5 text-emerald-300">
             <Clock className="h-3.5 w-3.5" />
             <span className="text-[10px] font-bold uppercase tracking-wider">Est. Travel Time</span>
           </div>
