@@ -15,6 +15,7 @@ import { calculateFare } from '@/lib/routing';
 
 const AUTO_SCROLL_MS = 2500;
 const RESUME_AFTER_INTERACTION_MS = 6000;
+const DEFAULT_PHONE = '+919876543210';
 
 interface AmbulanceCardProps {
   ambulance: AmbulanceWithDistance;
@@ -282,6 +283,16 @@ export default function AmbulanceCard({
             )}
           </div>
         </div>
+
+        {/* Call Button */}
+        <a
+          href={`tel:${ambulance.phone || DEFAULT_PHONE}`}
+          onClick={(e) => e.stopPropagation()}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 py-3 text-sm font-black text-white shadow-md shadow-emerald-600/20 transition-transform active:scale-[0.98] hover:from-emerald-700 hover:to-emerald-800"
+        >
+          <Phone className="h-4 w-4" />
+          <span>CALL & BOOK</span>
+        </a>
       </div>
     </article>
   );

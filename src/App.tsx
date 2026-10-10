@@ -10,7 +10,7 @@ import {
   Headphones,
 } from 'lucide-react';
 import type { Location, RouteInfo, Ambulance as AmbulanceType, AmbulanceWithDistance } from '@/lib/types';
-import { getRoute, calculateFare } from '@/lib/routing';
+import { getRoute } from '@/lib/routing';
 import { fetchAmbulances, sortAmbulancesByProximity } from '@/lib/ambulanceData';
 import ConnectedLocationSearch from '@/components/ConnectedLocationSearch';
 import RouteSummary from '@/components/RouteSummary';
@@ -111,12 +111,10 @@ export default function App() {
     setSelectedAmbulance(amb.id);
   };
 
-  const selectedAmb = sortedAmbulances.find((a) => a.id === selectedAmbulance) || sortedAmbulances[0];
-
   return (
     <div className="min-h-screen bg-ink-950 font-sans text-ink-900 antialiased selection:bg-emerald-500 selection:text-white">
       {/* Mobile-first central wrapper */}
-      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-ink-50 shadow-2xl pb-28">
+      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-ink-50 shadow-2xl pb-6">
         
         {/* Top App Bar */}
         <header className="sticky top-0 z-30 border-b border-ink-200/80 bg-white/95 backdrop-blur-xl">
@@ -267,40 +265,7 @@ export default function App() {
           </div>
         </main>
 
-        {/* Sticky Mobile Bottom Booking Bar */}
-        {selectedAmb && route && (
-          <div className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-md border-t border-ink-200/90 bg-white/95 p-3.5 shadow-2xl backdrop-blur-xl animate-slide-up">
-            <div className="flex items-center justify-between gap-3 mb-2">
-              <div className="min-w-0 flex-1">
-                <span className="block truncate text-xs font-extrabold text-ink-900">
-                  {selectedAmb.name}
-                </span>
-                <span className="block text-[11px] font-semibold text-emerald-600">
-                  {selectedAmb.distanceToPickupKm < 1
-                    ? `${Math.round(selectedAmb.distanceToPickupKm * 1000)} m away`
-                    : `${selectedAmb.distanceToPickupKm.toFixed(1)} km away • Ready to dispatch`}
-                </span>
-              </div>
 
-              <div className="text-right">
-                <span className="block text-[10px] font-bold uppercase tracking-wider text-ink-400">
-                  Est. Fare
-                </span>
-                <span className="font-display text-lg font-black text-emerald-700">
-                  ₹{calculateFare(selectedAmb.base_fare, selectedAmb.per_km, route.distanceKm).toLocaleString('en-IN')}
-                </span>
-              </div>
-            </div>
-
-            <a
-              href={`tel:${selectedAmb.phone}`}
-              className="flex w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 py-3.5 text-base font-black text-white shadow-xl shadow-emerald-600/25 transition-transform active:scale-98 hover:from-emerald-700 hover:to-emerald-800"
-            >
-              <Phone className="h-5 w-5" />
-              <span>CALL & BOOK ({selectedAmb.phone})</span>
-            </a>
-          </div>
-        )}
       </div>
     </div>
   );
